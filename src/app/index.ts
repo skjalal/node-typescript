@@ -1,9 +1,8 @@
 import express, { Express, NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
-import base from "./router/base-router";
+import { BaseRouter, UserRouter } from "./router";
 import { errorHandler } from "./model/ErrorHandler";
 import { dbMigrate } from "./config/db-migration";
-import routes from "./router/user-route";
 
 const app: Express = express();
 
@@ -16,11 +15,11 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use(base);
+app.use(BaseRouter);
 
 app.use(errorHandler);
 dbMigrate();
 
-app.use("/api/v1", routes);
+app.use("/api/v1", UserRouter);
 
 app.listen({ port: 3000 });
