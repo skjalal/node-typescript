@@ -1,3 +1,4 @@
 import { User } from "./User";
+import ResponseError from "./ResponseError";
 
-export { User };
+export { User, ResponseError };

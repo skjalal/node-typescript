@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
+import { body, ValidationChain, validationResult } from "express-validator";
 import {
   create,
   deleteUser,
@@ -6,9 +7,23 @@ import {
   getUser,
   update,
 } from "../controller/user-controller";
+import { ResponseError } from "../interface";
 import { CreateUserDTO, UpdateUserDTO } from "../dto/user.dto";
 
-const userRouter = Router();
+const userRouter: Router = Router();
+
+const payloadValidation: ValidationChain[] = [
+  body("name", "User name is required").trim().isLength({ min: 3 }),
+  body("age", "User age must be 18").isInt({ min: 18 }),
+];
+
+const validationErrors: any = (req: Request) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    throw new ResponseError("Data is incorrect", 422);
+  }
+};
 
 userRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -39,8 +54,10 @@ userRouter.get(
 
 userRouter.put(
   "/:id",
+  [...payloadValidation],
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      validationErrors(req);
       const id = Number(req.params.id);
       const payload: UpdateUserDTO = req.body;
       const result = await update(id, payload);
@@ -55,8 +72,10 @@ userRouter.put(
 
 userRouter.post(
   "/",
+  payloadValidation,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      validationErrors(req);
       const payload: CreateUserDTO = req.body;
       const result = await create(payload);
       res.status(200).json(result);

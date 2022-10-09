@@ -1,1 +1,1 @@
-create table if not exists public.user (user_id int not null primary key, user_name text, age int, created_date timestamp default current_timestamp, updated_date timestamp default current_timestamp)
+create table if not exists public.user (user_id integer GENERATED ALWAYS AS IDENTITY primary key, user_name text, age integer, created_date timestamp default current_timestamp, updated_date timestamp default current_timestamp)

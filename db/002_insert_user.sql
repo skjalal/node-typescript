@@ -1,1 +1,1 @@
-insert into public.user values(1, 'ABC', 23);
+insert into public.user(user_name, age) values('ABC', 23);
