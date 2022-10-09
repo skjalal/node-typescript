@@ -1,0 +1,1 @@
+create table if not exists public.user (user_id int not null primary key, user_name text, age int, created_date timestamp default current_timestamp, updated_date timestamp default current_timestamp)

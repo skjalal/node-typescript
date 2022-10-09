@@ -1,0 +1,1 @@
+insert into public.user values(1, 'ABC', 23);
